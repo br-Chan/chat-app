@@ -15,14 +15,8 @@ export class AuthService {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
 
     this.supabase.auth.onAuthStateChange(async (event, session) => {
-      // TODO: remove these name-getting shenanigans if redundant
-      const { data } = await this.supabase
-        .from("users")
-        .select("name")
-        .eq("id", session?.user.id)
-        .maybeSingle();
-      localStorage.setItem("session", JSON.stringify({ user: session?.user, name: data?.name }));
-      console.log(localStorage.getItem("session"));
+      localStorage.setItem("session", JSON.stringify(session?.user));
+
       if (session?.user) {
         this._ngZone.run(() => {
           this.router.navigate(["/chat"]);
@@ -33,6 +27,7 @@ export class AuthService {
 
   get isLoggedIn(): boolean {
     const user = localStorage.getItem("session") as string;
+    console.log(user);
     return user !== "undefined";
   }
 

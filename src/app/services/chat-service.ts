@@ -13,6 +13,25 @@ export class ChatService {
   }
 
   async sendChatMessage(text: string) {
-    await this.supabase.from("chat").insert({ text });
+    try {
+      const { data, error } = await this.supabase.from("chat").insert({ text });
+      if (error) {
+        alert(error.message);
+      }
+    } catch (error) {
+      alert(error);
+    }
+  }
+
+  async listChat() {
+    try {
+      const { data, error } = await this.supabase.from("chat").select("*,users(*)");
+      if (error) {
+        alert(error.message);
+      }
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 }
