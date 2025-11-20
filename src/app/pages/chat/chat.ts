@@ -18,7 +18,6 @@ export class Chat {
 
   constructor() {
     effect(() => {
-      console.log("HI");
       this.onListChat();
     });
   }
@@ -46,13 +45,11 @@ export class Chat {
   }
 
   onListChat() {
-    console.log("onListChat");
     this.chatService
       .listChat()
       .then((res: ChatMessage[] | null) => {
         console.log(res);
         if (res !== null) {
-          console.log("not null!");
           this.chats.set(res);
         } else {
           console.log("No messages Found");
@@ -71,11 +68,6 @@ export class Chat {
       if (!record) return;
 
       this.onListChat();
-
-      if (update.table == "chat") {
-        if (event === "INSERT") {
-        }
-      }
     });
   }
 }
