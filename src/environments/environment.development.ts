@@ -1,5 +1,10 @@
 export const environment = {
-  production: false,
   supabaseUrl: "",
   supabaseKey: "",
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
 };
