@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { environment } from "../../environments/environment.development";
+import { Observable, Subject } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -33,5 +34,18 @@ export class ChatService {
     } catch (error) {
       throw error;
     }
+  }
+
+  getChatChanges() {
+    return new Observable<any>((subscriber) => {
+      const channel = this.supabase
+        .channel("chat")
+        .on("postgres_changes", { event: "*", schema: "public", table: "chat" }, (payload: any) =>
+          subscriber.next(payload),
+        )
+        .subscribe();
+
+      return () => this.supabase.removeChannel(channel);
+    });
   }
 }

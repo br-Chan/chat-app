@@ -27,6 +27,8 @@ export class Chat {
     this.chatForm = this.fb.group({
       chat_message: ["", Validators.required],
     });
+
+    this.handleRealtimeUpdates();
   }
 
   onSubmit() {
@@ -37,7 +39,6 @@ export class Chat {
       .then((res) => {
         console.log(res);
         this.chatForm.reset();
-        this.onListChat();
       })
       .catch((err) => {
         alert(err.message);
@@ -60,5 +61,21 @@ export class Chat {
       .catch((err) => {
         alert(err.message);
       });
+  }
+
+  handleRealtimeUpdates() {
+    this.chatService.getChatChanges().subscribe((update: any) => {
+      const record = update.new?.id ? update.new : update.old;
+      const event = update.eventType;
+
+      if (!record) return;
+
+      this.onListChat();
+
+      if (update.table == "chat") {
+        if (event === "INSERT") {
+        }
+      }
+    });
   }
 }
